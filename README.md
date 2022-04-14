@@ -1,4 +1,5 @@
 # Django-and-Django-REST-Framework
+[![Build Status](https://app.travis-ci.com/LuisRococo/Practica-Travis.svg?branch=main)](https://app.travis-ci.com/LuisRococo/Practica-Travis)
 
 ## Setup
 ### Installing docker compose
