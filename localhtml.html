@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <Button onclick="logout()">Log Out</Button>
+
+    <script>
+        let _data = {
+            username: "admin",
+            password: "admin",
+            email: "admin@admin.com"
+        }
+        var logout_json = {
+            refresh: ""
+        }
+        let bearer_log_out = '';
+
+        fetch('http://3.218.67.164:9026/users/login', {
+                method: "POST",
+                body: JSON.stringify(_data),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+            .then(response => response.json())
+            .then(json => console.log('REQUEST2', json))
+            .catch(err => console.log('ERROR2', err));
+
+        fetch('http://3.218.67.164:9026/api/token/', {
+                method: "POST",
+                body: JSON.stringify(_data),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+            .then(response => response.json())
+            .then(
+                (json) => {
+                    logout_json['refresh'] = json['refresh'];
+                    bearer_log_out = json['access'];
+                    console.log('REQUEST1', json);
+                })
+            .catch(err => console.log('ERROR1', err));
+
+        function logout() {
+            req = JSON.stringify(logout_json);
+            console.log('REQ:', req);
+            fetch('http://3.218.67.164:9026/users/logout', {
+                    method: "POST",
+                    body: req,
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        "Authorization": `Bearer ${bearer_log_out}`
+                    }
+                })
+                .then((response) => {
+                    console.log(`Status: ${response.status}`);
+                    return response.json();
+                })
+                .then(json => console.log('REQUEST3', json))
+                .catch(err => console.log('ERROR3', err));
+        }
+    </script>
+</body>
+
+</html>
